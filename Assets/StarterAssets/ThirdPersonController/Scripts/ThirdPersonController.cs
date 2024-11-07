@@ -1,10 +1,10 @@
-﻿ using UnityEngine;
+﻿/* using UnityEngine;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
 
-/* Note: animations are called via the controller for both the character and capsule using animator null checks
- */
+*//* Note: animations are called via the controller for both the character and capsule using animator null checks
+ *//*
 
 namespace StarterAssets
 {
@@ -161,10 +161,10 @@ namespace StarterAssets
             Move();
         }
 
-        private void LateUpdate()
+*//*        private void LateUpdate()
         {
             CameraRotation();
-        }
+        }*//*
 
         private void AssignAnimationIDs()
         {
@@ -184,13 +184,13 @@ namespace StarterAssets
                 QueryTriggerInteraction.Ignore);
 
             // update animator if using character
-/*            if (_hasAnimator)
+*//*            if (_hasAnimator)
             {
                 _animator.SetBool(_animIDGrounded, Grounded);
-            }*/
+            }*//*
         }
 
-        private void CameraRotation()
+*//*        private void CameraRotation()
         {
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
@@ -209,7 +209,7 @@ namespace StarterAssets
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
-        }
+        }*//*
 
         private void Move()
         {
@@ -245,8 +245,8 @@ namespace StarterAssets
                 _speed = targetSpeed;
             }
 
-/*            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
-            if (_animationBlend < 0.01f) _animationBlend = 0f;*/
+*//*            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
+            if (_animationBlend < 0.01f) _animationBlend = 0f;*//*
 
             // normalise input direction
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
@@ -272,11 +272,11 @@ namespace StarterAssets
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update animator if using character
-/*            if (_hasAnimator)
+*//*            if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-            }*/
+            }*//*
         }
 
         private void JumpAndGravity()
@@ -286,12 +286,12 @@ namespace StarterAssets
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
-/*                // update animator if using character
+*//*                // update animator if using character
                 if (_hasAnimator)
                 {
                     _animator.SetBool(_animIDJump, false);
                     _animator.SetBool(_animIDFreeFall, false);
-                }*/
+                }*//*
 
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
@@ -306,10 +306,10 @@ namespace StarterAssets
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 
                     // update animator if using character
-/*                    if (_hasAnimator)
+*//*                    if (_hasAnimator)
                     {
                         _animator.SetBool(_animIDJump, true);
-                    }*/
+                    }*//*
                 }
 
                 // jump timeout
@@ -331,10 +331,10 @@ namespace StarterAssets
                 else
                 {
                     // update animator if using character
-/*                    if (_hasAnimator)
+*//*                    if (_hasAnimator)
                     {
                         _animator.SetBool(_animIDFreeFall, true);
-                    }*/
+                    }*//*
                 }
 
                 // if we are not grounded, do not jump
@@ -369,7 +369,7 @@ namespace StarterAssets
                 GroundedRadius);
         }
 
-/*        private void OnFootstep(AnimationEvent animationEvent)
+*//*        private void OnFootstep(AnimationEvent animationEvent)
         {
             if (animationEvent.animatorClipInfo.weight > 0.5f)
             {
@@ -387,6 +387,6 @@ namespace StarterAssets
             {
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }*/
-/*        }*/
+/*        }*//*
     }
-}
+}*/

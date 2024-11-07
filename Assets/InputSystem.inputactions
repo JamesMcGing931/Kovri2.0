@@ -2,15 +2,15 @@
     "name": "InputSystem",
     "maps": [
         {
-            "name": "Player",
+            "name": "CharacterControl",
             "id": "c5cc0ce9-e987-4ea0-887d-c653d94585b0",
             "actions": [
                 {
                     "name": "Move",
                     "type": "Value",
                     "id": "99dfcd56-471b-4d75-9cae-fe860839e2ff",
-                    "expectedControlType": "",
-                    "processors": "",
+                    "expectedControlType": "Vector2",
+                    "processors": "NormalizeVector2",
                     "interactions": "",
                     "initialStateCheck": true
                 },
@@ -25,8 +25,17 @@
                 },
                 {
                     "name": "Fire",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "bf3d721c-ea61-440a-858d-c3d2fd0f5532",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Roll",
+                    "type": "Button",
+                    "id": "e8b131f6-adc2-4c80-83de-b9f728404acd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -251,6 +260,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "Fire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a8969af-88a1-43a7-a63c-743936ace168",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Roll",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

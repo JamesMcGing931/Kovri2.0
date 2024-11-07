@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 25c9c75a465eaa740aa2f9df012c598e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 188865
+  packageName: "Low Pol\u0443 Skeleton"
+  packageVersion: 1.0
+  assetPath: Assets/LowPolySkeleton/LowPolySkeleton_Animations/Animator_LPSkeleton.controller
+  uploadId: 417083
