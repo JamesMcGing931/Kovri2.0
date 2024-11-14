@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class WeaponAttributes : MonoBehaviour
 {
-    public AttributesManager atm;
+    public PlayerHealth playerHealth; // Reference to the player's health and attack power
 
     private void OnTriggerEnter(Collider other)
     {
+        // Check if the collider belongs to an enemy
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("Player is in contact with the enemy: " + other.name);  // Log when contact with enemy happens
-
-            other.GetComponent<AttributesManager>().TakeDamage(atm.attack);
+            var enemyHealth = other.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(playerHealth.attack);
+            }
         }
     }
 }

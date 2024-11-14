@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DamageTester : MonoBehaviour
 {
-    public AttributesManager playerAtm;
-    public AttributesManager enemyAtm;
+    public PlayerHealth playerAtm;
+/*    public EnemyHealth enemyAtm;
 
     private void Update()
     {
@@ -18,5 +18,5 @@ public class DamageTester : MonoBehaviour
         {
             enemyAtm.DealDamage(playerAtm.gameObject);
         }
-    }
+    }*/
 }
