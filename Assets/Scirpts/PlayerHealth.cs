@@ -1,9 +1,11 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int health = 100;
+    public int maxHealth = 100;
     public int attack = 10;
     public float knockbackForce = 5f;
     public float knockbackDuration = 0.2f;
@@ -15,12 +17,45 @@ public class PlayerHealth : MonoBehaviour
     private bool isInvulnerable = false;
     private bool isDead = false; // Prevent input when dead
 
+    [Header("Game Over UI")]
+    public GameObject gameOverUI; // Assign the Game Over UI Canvas in the Inspector
+    public CanvasGroup canvasGroup; // Reference to the Canvas Group
+    public float gameOverDelay = 3f; // Delay before showing the Game Over screen
+    public float fadeDuration = 2f; // Time it takes to fade in
+
     private void Start()
     {
         if (playerRenderer != null)
         {
             originalColor = playerRenderer.material.color;
         }
+
+        // Ensure Canvas Group starts fully transparent
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if the collided object is a potion
+        if (other.CompareTag("Potion"))
+        {
+            RestoreHealth(20); // Restore 20 health
+            Destroy(other.gameObject); // Destroy the potion
+        }
+    }
+
+    public void RestoreHealth(int amount)
+    {
+        health += amount;
+        if (health > maxHealth)
+        {
+            health = maxHealth; // Clamp health to maximum value
+        }
+
+        Debug.Log($"Health restored. Current Health: {health}");
     }
 
     public void TakeDamage(int amount)
@@ -61,8 +96,34 @@ public class PlayerHealth : MonoBehaviour
         {
             movement.DisableInputs();
         }
+
+        // Show Game Over screen after a delay
+        StartCoroutine(ShowGameOverScreen());
     }
 
+    private IEnumerator ShowGameOverScreen()
+    {
+        yield return new WaitForSeconds(gameOverDelay);
+
+        if (canvasGroup != null)
+        {
+            yield return StartCoroutine(FadeInUI());
+        }
+    }
+
+    private IEnumerator FadeInUI()
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Clamp01(elapsedTime / fadeDuration); // Gradually increase alpha
+            yield return null;
+        }
+
+        canvasGroup.alpha = 1; // Ensure it’s fully visible at the end
+    }
 
     private void PlayGetHitAnimation()
     {
@@ -101,5 +162,11 @@ public class PlayerHealth : MonoBehaviour
 
         yield return new WaitForSeconds(0.8f);
         isInvulnerable = false;
+    }
+
+    // Restart the current scene
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -4,99 +4,97 @@ using UnityEngine;
 
 public class EnemyAgroZone : MonoBehaviour
 {
-    public GameObject enemy;
-    public float movementSpeed;
-    public float rotationSpeed = 5f;  // Rotation speed to control how fast the enemy turns
+    public GameObject target; // Player or object to chase
+    public GameObject enemy; // Enemy GameObject
+    public float movementSpeed = 5f; // Speed of enemy movement
 
-    private Rigidbody enemyRigidBody;
-    private Vector3 calculatedDirection;
-    private Vector3 calculatedDistance;
-    private bool targetDetected = false;
+    private Rigidbody enemyRigidBody; // 3D Rigidbody for the enemy
+    private Vector3 calculatedDirection; // Direction toward the target
+    private Vector3 calculatedDistance; // Distance from the target
+    private bool targetDetected = false; // Whether the target is in range
 
-    private WaypointPatternMovement waypointMovement; // Reference to the waypoint movement script
+    private Animator enemyAnimator; // Animator for enemy animations
 
-    // Start is called before the first frame update
     void Start()
     {
-        enemyRigidBody = enemy.GetComponent<Rigidbody>();
-        waypointMovement = enemy.GetComponent<WaypointPatternMovement>(); // Get the waypoint script component
+        // Get the Rigidbody and Animator components
+        enemyRigidBody = enemy.GetComponentInChildren<Rigidbody>();
+        if (enemyRigidBody == null)
+        {
+            Debug.LogError("Enemy does not have a Rigidbody component.");
+        }
+
+        enemyAnimator = enemy.GetComponent<Animator>();
+        if (enemyAnimator == null)
+        {
+            Debug.LogError("Enemy does not have an Animator component.");
+        }
+    }
+
+    void Update()
+    {
+        if (targetDetected)
+        {
+            // Play walking animation
+            enemyAnimator.SetBool("IsWalking", true);
+        }
+        else
+        {
+            // Stop walking animation
+            enemyAnimator.SetBool("IsWalking", false);
+        }
     }
 
     private void FixedUpdate()
     {
         if (targetDetected)
         {
-            // Locate the player dynamically by tag
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player == null)
+            // Calculate the direction toward the target
+            calculatedDirection = (target.transform.position - enemy.transform.position).normalized;
+
+            // Calculate the distance from the target
+            calculatedDistance = target.transform.position - enemy.transform.position;
+
+            // Check if the enemy is far enough from the target
+            if (calculatedDistance.magnitude >= 2f)
             {
-                Debug.LogWarning("Player object not found in the scene with tag 'Player'.");
-                return;
-            }
-
-            // Disable waypoint movement while chasing the player
-            if (waypointMovement != null)
-            {
-                waypointMovement.enabled = false;
-            }
-
-            // Calculate the direction to the player
-            calculatedDirection = (player.transform.position - enemy.transform.position).normalized;
-
-            // Calculate the distance from the player
-            calculatedDistance = player.transform.position - enemy.transform.position;
-
-            // Rotate the enemy to face the player
-            if (calculatedDirection != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(calculatedDirection);
-                enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            }
-
-            // Move towards the player if the distance is greater than 2 units
-            if (calculatedDistance.magnitude >= 2)
-            {
+                // Move the enemy toward the target
                 enemyRigidBody.velocity = new Vector3(
                     calculatedDirection.x * movementSpeed,
-                    enemyRigidBody.velocity.y, // Keep Y velocity for gravity
+                    enemyRigidBody.velocity.y, // Maintain gravity
                     calculatedDirection.z * movementSpeed
                 );
             }
             else
             {
-                // Stop moving if too close to the player
-                enemyRigidBody.velocity = Vector3.zero;
+                // Stop moving when close enough
+                enemyRigidBody.velocity = new Vector3(0, enemyRigidBody.velocity.y, 0);
             }
         }
         else
         {
-            // Re-enable waypoint movement when player is out of range
-            if (waypointMovement != null)
-            {
-                waypointMovement.enabled = true;
-            }
-
-            // Stop moving when target is not detected
-            enemyRigidBody.velocity = Vector3.zero;
+            // Stop the enemy's movement if the target is not detected
+            enemyRigidBody.velocity = new Vector3(0, enemyRigidBody.velocity.y, 0);
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Detect player by tag
-        if (other.CompareTag("Player"))
+        // Check if the detected object is the target
+        if (other.gameObject == target)
         {
             targetDetected = true;
-            Debug.Log("Player detected by aggro zone!");
+            Debug.Log("Target detected!");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        // Check if the exiting object is the target
+        if (other.gameObject == target)
         {
             targetDetected = false;
-            Debug.Log("Player left aggro zone!");
+            Debug.Log("Target lost!");
         }
     }
 }
