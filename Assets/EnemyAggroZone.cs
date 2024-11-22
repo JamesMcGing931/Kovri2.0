@@ -4,21 +4,20 @@ using UnityEngine;
 
 public class EnemyAgroZone : MonoBehaviour
 {
-    public GameObject target; // Player or object to chase
-    public GameObject enemy; // Enemy GameObject
-    public float movementSpeed = 5f; // Speed of enemy movement
+    public GameObject target; 
+    public GameObject enemy; 
+    public float movementSpeed = 5f; 
 
-    private Rigidbody enemyRigidBody; // 3D Rigidbody for the enemy
-    private Vector3 calculatedDirection; // Direction toward the target
-    private Vector3 calculatedDistance; // Distance from the target
-    private bool targetDetected = false; // Whether the target is in range
+    private Rigidbody enemyRigidBody; 
+    private Vector3 calculatedDirection; 
+    private Vector3 calculatedDistance; 
+    private bool targetDetected = false; 
 
-    private Animator enemyAnimator; // Animator for enemy animations
+    private Animator enemyAnimator; 
 
     void Start()
     {
-        // Get the Rigidbody and Animator components
-        enemyRigidBody = enemy.GetComponentInChildren<Rigidbody>();
+        enemyRigidBody = enemy.GetComponent<Rigidbody>();
         if (enemyRigidBody == null)
         {
             Debug.LogError("Enemy does not have a Rigidbody component.");
@@ -35,12 +34,10 @@ public class EnemyAgroZone : MonoBehaviour
     {
         if (targetDetected)
         {
-            // Play walking animation
             enemyAnimator.SetBool("IsWalking", true);
         }
         else
         {
-            // Stop walking animation
             enemyAnimator.SetBool("IsWalking", false);
         }
     }
@@ -80,7 +77,6 @@ public class EnemyAgroZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the detected object is the target
         if (other.gameObject == target)
         {
             targetDetected = true;
@@ -90,7 +86,6 @@ public class EnemyAgroZone : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        // Check if the exiting object is the target
         if (other.gameObject == target)
         {
             targetDetected = false;
