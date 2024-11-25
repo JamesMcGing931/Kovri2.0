@@ -23,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
     public float rollMultiplier = 3f;
     public float movementSpeed = 5f; // New variable for movement speed
 
+    public GameObject bombPrefab; // Assign the bomb prefab in the Inspector
+    public float bombSpawnDistance = 2f; // Distance to spawn the bomb in front of the player
+
     Animator anim;
     private float gravity;
 
@@ -39,6 +42,9 @@ public class PlayerMovement : MonoBehaviour
 
         // Attack input handling
         inputSystem.CharacterControl.Fire.started += onAttackInput;
+
+        inputSystem.CharacterControl.Bomb.started += onBombInput;
+
 
         // Roll input handling
         inputSystem.CharacterControl.Roll.started += onRollInput;
@@ -89,6 +95,16 @@ public class PlayerMovement : MonoBehaviour
             anim.SetTrigger("Attack");
             isAttacking = true;
         }
+    }
+
+    void onBombInput(InputAction.CallbackContext context)
+    {
+
+        if (isDead || bombPrefab == null) return;
+
+        // Spawn the bomb in front of the player
+        Vector3 spawnPosition = transform.position + transform.forward * bombSpawnDistance;
+        Instantiate(bombPrefab, spawnPosition, Quaternion.identity);
     }
 
     void handleRotation()

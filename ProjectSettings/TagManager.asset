@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Potion
   - Collectable
+  - CinemachineTarget
+  - BombCollectible
   layers:
   - Default
   - TransparentFX

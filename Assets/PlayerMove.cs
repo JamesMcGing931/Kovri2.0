@@ -62,6 +62,15 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Bomb"",
+                    ""type"": ""Button"",
+                    ""id"": ""2299893a-c613-48bd-a1ee-4d5ede5c3e29"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -293,6 +302,17 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1e4de91-8be0-45cf-ba1d-0338e344b2fa"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Bomb"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -884,6 +904,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_CharacterControl_Look = m_CharacterControl.FindAction("Look", throwIfNotFound: true);
         m_CharacterControl_Fire = m_CharacterControl.FindAction("Fire", throwIfNotFound: true);
         m_CharacterControl_Roll = m_CharacterControl.FindAction("Roll", throwIfNotFound: true);
+        m_CharacterControl_Bomb = m_CharacterControl.FindAction("Bomb", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -961,6 +982,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControl_Look;
     private readonly InputAction m_CharacterControl_Fire;
     private readonly InputAction m_CharacterControl_Roll;
+    private readonly InputAction m_CharacterControl_Bomb;
     public struct CharacterControlActions
     {
         private @InputSystem m_Wrapper;
@@ -969,6 +991,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_CharacterControl_Look;
         public InputAction @Fire => m_Wrapper.m_CharacterControl_Fire;
         public InputAction @Roll => m_Wrapper.m_CharacterControl_Roll;
+        public InputAction @Bomb => m_Wrapper.m_CharacterControl_Bomb;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControl; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -990,6 +1013,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Roll.started += instance.OnRoll;
             @Roll.performed += instance.OnRoll;
             @Roll.canceled += instance.OnRoll;
+            @Bomb.started += instance.OnBomb;
+            @Bomb.performed += instance.OnBomb;
+            @Bomb.canceled += instance.OnBomb;
         }
 
         private void UnregisterCallbacks(ICharacterControlActions instance)
@@ -1006,6 +1032,9 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Roll.started -= instance.OnRoll;
             @Roll.performed -= instance.OnRoll;
             @Roll.canceled -= instance.OnRoll;
+            @Bomb.started -= instance.OnBomb;
+            @Bomb.performed -= instance.OnBomb;
+            @Bomb.canceled -= instance.OnBomb;
         }
 
         public void RemoveCallbacks(ICharacterControlActions instance)
@@ -1192,6 +1221,7 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnRoll(InputAction.CallbackContext context);
+        void OnBomb(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
