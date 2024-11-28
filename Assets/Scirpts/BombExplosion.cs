@@ -51,6 +51,7 @@ public class Bomb : MonoBehaviour
 
         foreach (Collider hitCollider in hitColliders)
         {
+            // Check for PlayerHealth
             PlayerHealth playerHealth = hitCollider.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
@@ -58,13 +59,20 @@ public class Bomb : MonoBehaviour
                 continue; // Skip to the next collider
             }
 
+            // Check for EnemyHealth
             EnemyHealth enemyHealth = hitCollider.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(explosionDamage);
+                // Calculate knockback direction (from explosion center to enemy)
+                Vector3 knockbackDirection = hitCollider.transform.position - transform.position;
+                knockbackDirection.y = 0; // Keep knockback horizontal (optional)
+
+                // Apply damage and knockback to the enemy
+                enemyHealth.TakeDamage(explosionDamage, knockbackDirection);
             }
         }
     }
+
 
     private void OnDrawGizmosSelected()
     {

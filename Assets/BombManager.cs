@@ -5,6 +5,8 @@ public class BombManager : MonoBehaviour
 {
     public int bombCount = 0; // Number of bombs the player has
     public TMP_Text bombCountText; // Assign this in the Inspector to the bomb UI text
+    public GameObject bombPrefab; // Assign the bomb prefab in the Inspector
+    public float bombSpawnDistance = 2f; // Distance to spawn the bomb in front of the player
 
     private void Start()
     {
@@ -15,6 +17,37 @@ public class BombManager : MonoBehaviour
     {
         bombCount += amount;
         UpdateUI();
+    }
+
+    public void UseBomb()
+    {
+        if (bombCount > 0)
+        {
+            // Decrement bomb count and update UI
+            bombCount--;
+            UpdateUI();
+
+            // Spawn the bomb
+            PlaceBomb();
+        }
+        else
+        {
+            Debug.Log("No bombs left to place!");
+        }
+    }
+
+    private void PlaceBomb()
+    {
+        if (bombPrefab != null)
+        {
+            // Calculate the spawn position in front of the player
+            Vector3 spawnPosition = transform.position + transform.forward * bombSpawnDistance;
+
+            // Instantiate the bomb at the calculated position
+            Instantiate(bombPrefab, spawnPosition, Quaternion.identity);
+
+            Debug.Log("Bomb placed at: " + spawnPosition);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

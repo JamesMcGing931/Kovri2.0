@@ -14,7 +14,12 @@ public class WeaponAttributes : MonoBehaviour
             var enemyHealth = other.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(playerHealth.attack);
+                // Calculate the knockback direction
+                Vector3 knockbackDirection = other.transform.position - transform.position;
+                knockbackDirection.y = 0; // Ensure knockback is only horizontal (optional)
+
+                // Apply damage and knockback
+                enemyHealth.TakeDamage(playerHealth.attack, knockbackDirection);
             }
         }
     }

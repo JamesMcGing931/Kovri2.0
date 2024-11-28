@@ -99,12 +99,14 @@ public class PlayerMovement : MonoBehaviour
 
     void onBombInput(InputAction.CallbackContext context)
     {
+        if (isDead) return; // Prevent bomb placement if the player is dead
 
-        if (isDead || bombPrefab == null) return;
-
-        // Spawn the bomb in front of the player
-        Vector3 spawnPosition = transform.position + transform.forward * bombSpawnDistance;
-        Instantiate(bombPrefab, spawnPosition, Quaternion.identity);
+        // Call the UseBomb method from BombManager
+        BombManager bombManager = GetComponent<BombManager>();
+        if (bombManager != null)
+        {
+            bombManager.UseBomb();
+        }
     }
 
     void handleRotation()
