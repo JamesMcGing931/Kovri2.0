@@ -10,10 +10,8 @@ public class WeaponManager : MonoBehaviour
     {
         if (weapon != null)
         {
-            //Check if character holding weapon
             var col = weapon.GetComponent<Collider>();
 
-            //Check if weapon has collider
             if(col != null )
             {
                 if(isEnable == 1 )

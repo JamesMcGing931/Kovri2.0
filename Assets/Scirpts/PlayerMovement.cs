@@ -17,14 +17,14 @@ public class PlayerMovement : MonoBehaviour
     bool isAttackPressed;
     bool isRolling;
     bool isAttacking;
-    bool isDead; // Track if the player is dead
+    bool isDead; 
 
     float rotationFactorPerFrame = 15f;
     public float rollMultiplier = 3f;
-    public float movementSpeed = 5f; // New variable for movement speed
+    public float movementSpeed = 5f; 
 
-    public GameObject bombPrefab; // Assign the bomb prefab in the Inspector
-    public float bombSpawnDistance = 2f; // Distance to spawn the bomb in front of the player
+    public GameObject bombPrefab; 
+    public float bombSpawnDistance = 2f; 
 
     Animator anim;
     private float gravity;
@@ -35,33 +35,29 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
 
-        // Movement input handling
         inputSystem.CharacterControl.Move.started += onMovementInput;
         inputSystem.CharacterControl.Move.canceled += onMovementInput;
         inputSystem.CharacterControl.Move.performed += onMovementInput;
 
-        // Attack input handling
         inputSystem.CharacterControl.Fire.started += onAttackInput;
 
         inputSystem.CharacterControl.Bomb.started += onBombInput;
 
 
-        // Roll input handling
         inputSystem.CharacterControl.Roll.started += onRollInput;
         inputSystem.CharacterControl.Roll.canceled += onRollInput;
     }
 
     public void DisableInputs()
     {
-        // Called when the player dies
         isDead = true;
-        inputSystem.CharacterControl.Disable(); // Disable the input system
-        anim.SetTrigger("Die"); // Play death animation
+        inputSystem.CharacterControl.Disable(); 
+        anim.SetTrigger("Die"); 
     }
 
     void onMovementInput(InputAction.CallbackContext context)
     {
-        if (isDead) return; // Prevent input if dead
+        if (isDead) return; 
 
         currentMovementInput = context.ReadValue<Vector2>();
         currentMovement.x = currentMovementInput.x;
@@ -73,11 +69,11 @@ public class PlayerMovement : MonoBehaviour
 
     void onRollInput(InputAction.CallbackContext context)
     {
-        if (isDead) return; // Prevent rolling if dead
+        if (isDead) return; 
 
         isRollPressed = context.ReadValueAsButton();
 
-        if (isRollPressed && !isRolling && !isAttacking) // Prevent roll during attack
+        if (isRollPressed && !isRolling && !isAttacking) 
         {
             anim.SetTrigger("Roll");
             isRolling = true;
@@ -86,11 +82,11 @@ public class PlayerMovement : MonoBehaviour
 
     void onAttackInput(InputAction.CallbackContext context)
     {
-        if (isDead) return; // Prevent attacking if dead
+        if (isDead) return; 
 
         isAttackPressed = context.ReadValueAsButton();
 
-        if (isAttackPressed && !isAttacking && !isRolling) // Prevent attack during roll
+        if (isAttackPressed && !isAttacking && !isRolling) 
         {
             anim.SetTrigger("Attack");
             isAttacking = true;
@@ -99,9 +95,8 @@ public class PlayerMovement : MonoBehaviour
 
     void onBombInput(InputAction.CallbackContext context)
     {
-        if (isDead) return; // Prevent bomb placement if the player is dead
+        if (isDead) return; 
 
-        // Call the UseBomb method from BombManager
         BombManager bombManager = GetComponent<BombManager>();
         if (bombManager != null)
         {
@@ -111,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
     void handleRotation()
     {
-        if (isDead) return; // Prevent rotation if dead
+        if (isDead) return; 
 
         Vector3 positionToLookAt;
         positionToLookAt.x = currentMovement.x;
@@ -129,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
 
     void handleAnimation()
     {
-        if (isDead) return; // Prevent animations if dead
+        if (isDead) return; 
 
         bool isWalking = anim.GetBool("IsWalking");
 
@@ -175,7 +170,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isDead)
         {
-            // Ensure gravity is applied so the player doesn't float
             Vector3 gravityMovement = new Vector3(0, gravity * Time.deltaTime, 0);
             characterController.Move(gravityMovement);
             return;
@@ -188,15 +182,15 @@ public class PlayerMovement : MonoBehaviour
         {
             characterController.Move(currentRollMovement * Time.deltaTime);
         }
-        else if (!isAttacking) // Prevent movement while attacking
+        else if (!isAttacking) 
         {
-            characterController.Move(currentMovement * movementSpeed * Time.deltaTime); // Apply movement speed here
+            characterController.Move(currentMovement * movementSpeed * Time.deltaTime); 
         }
     }
 
     void OnEnable()
     {
-        if (!isDead) inputSystem.CharacterControl.Enable(); // Enable inputs only if alive
+        if (!isDead) inputSystem.CharacterControl.Enable(); 
     }
 
     void OnDisable()

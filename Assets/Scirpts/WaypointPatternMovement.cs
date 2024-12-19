@@ -25,13 +25,11 @@ public class WaypointPatternMovement : MonoBehaviour
 
         GameObject waypoint = pattern[patternIndex];
 
-        // Vector towards waypoint
         Vector3 rangeToClose = waypoint.transform.position - transform.position;
 
         float distance = rangeToClose.magnitude;
         float speedDelta = speed * Time.deltaTime;
 
-        // Check if waypoint has been reached
         if (distance <= speedDelta)
         {
             patternIndex++;
@@ -46,7 +44,6 @@ public class WaypointPatternMovement : MonoBehaviour
 
         Vector3 normalizedRangeToClose = rangeToClose.normalized;
 
-        // Rotate to direction it is facing
         if (normalizedRangeToClose != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(normalizedRangeToClose);

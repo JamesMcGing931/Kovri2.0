@@ -121,3 +121,4 @@ MonoBehaviour:
   explosionDelay: 1
   explosionRadius: 5
   explosionDamage: 50
+  explosionSound: {fileID: 8300000, guid: 5ff823f546b52574a931e1d9b44290a6, type: 3}

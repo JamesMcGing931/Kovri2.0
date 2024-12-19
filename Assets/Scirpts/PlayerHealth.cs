@@ -12,16 +12,16 @@ public class PlayerHealth : MonoBehaviour
     public Renderer playerRenderer;
     public Color damageColor = Color.red;
 
-    public Animator animator; // Reference to the Animator component
+    public Animator animator; 
     private Color originalColor;
     private bool isInvulnerable = false;
-    private bool isDead = false; // Prevent input when dead
+    private bool isDead = false;
 
     [Header("Game Over UI")]
-    public GameObject gameOverUI; // Assign the Game Over UI Canvas in the Inspector
-    public CanvasGroup canvasGroup; // Reference to the Canvas Group
-    public float gameOverDelay = 3f; // Delay before showing the Game Over screen
-    public float fadeDuration = 2f; // Time it takes to fade in
+    public GameObject gameOverUI; 
+    public CanvasGroup canvasGroup; 
+    public float gameOverDelay = 3f;
+    public float fadeDuration = 2f;
 
     private void Start()
     {
@@ -30,7 +30,6 @@ public class PlayerHealth : MonoBehaviour
             originalColor = playerRenderer.material.color;
         }
 
-        // Ensure Canvas Group starts fully transparent
         if (canvasGroup != null)
         {
             canvasGroup.alpha = 0;
@@ -39,11 +38,10 @@ public class PlayerHealth : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the collided object is a potion
         if (other.CompareTag("Potion"))
         {
-            RestoreHealth(20); // Restore 20 health
-            Destroy(other.gameObject); // Destroy the potion
+            RestoreHealth(20); 
+            Destroy(other.gameObject); 
         }
     }
 
@@ -52,10 +50,8 @@ public class PlayerHealth : MonoBehaviour
         health += amount;
         if (health > maxHealth)
         {
-            health = maxHealth; // Clamp health to maximum value
+            health = maxHealth; 
         }
-
-        Debug.Log($"Health restored. Current Health: {health}");
     }
 
     public void TakeDamage(int amount)
@@ -63,7 +59,6 @@ public class PlayerHealth : MonoBehaviour
         if (isInvulnerable || isDead) return;
 
         health -= amount;
-        Debug.Log($"Player took damage. Current Health: {health}");
 
         if (health <= 0)
         {
@@ -82,22 +77,18 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
-        Debug.Log("Player has died.");
 
-        // Play death animation
         if (animator != null)
         {
             animator.SetTrigger("Die");
         }
 
-        // Disable player inputs
         PlayerMovement movement = GetComponent<PlayerMovement>();
         if (movement != null)
         {
             movement.DisableInputs();
         }
 
-        // Show Game Over screen after a delay
         StartCoroutine(ShowGameOverScreen());
     }
 
@@ -122,7 +113,7 @@ public class PlayerHealth : MonoBehaviour
             yield return null;
         }
 
-        canvasGroup.alpha = 1; // Ensure it’s fully visible at the end
+        canvasGroup.alpha = 1;
     }
 
     private void PlayGetHitAnimation()
@@ -130,10 +121,6 @@ public class PlayerHealth : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("GetHit");
-        }
-        else
-        {
-            Debug.LogWarning("Animator not assigned!");
         }
     }
 
@@ -164,7 +151,6 @@ public class PlayerHealth : MonoBehaviour
         isInvulnerable = false;
     }
 
-    // Restart the current scene
     public void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

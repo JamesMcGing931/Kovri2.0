@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class EnemyAgroZone : MonoBehaviour
 {
-    public GameObject target; // Player target
-    public GameObject enemy; // Enemy itself
-    public float movementSpeed = 3f; // Speed of movement
-    public float rotationSpeed = 5f; // Rotation speed
-    public float attackRange = 1.5f; // Distance within which the enemy can attack
-    public float attackCooldown = 2f; // Cooldown between attacks
+    public GameObject target; 
+    public GameObject enemy; 
+    public float movementSpeed = 3f; 
+    public float rotationSpeed = 5f;
+    public float attackRange = 1.5f; 
+    public float attackCooldown = 2f; 
 
     private Rigidbody enemyRigidBody;
     private Animator animator;
@@ -19,7 +19,6 @@ public class EnemyAgroZone : MonoBehaviour
     private bool targetDetected = false;
     private bool isAttacking = false;
 
-    // Start is called before the first frame update
     void Start()
     {
         enemyRigidBody = enemy.GetComponent<Rigidbody>();
@@ -31,7 +30,6 @@ public class EnemyAgroZone : MonoBehaviour
     {
         if (targetDetected)
         {
-            // Disable waypoint movement while chasing the player
             if (waypointMovement != null)
             {
                 waypointMovement.enabled = false;
@@ -40,12 +38,12 @@ public class EnemyAgroZone : MonoBehaviour
             // Calculate direction to the player
             calculatedDirection = (target.transform.position - enemy.transform.position).normalized;
 
-            // Calculate distance to the player
+            // Calculate distance
             calculatedDistance = target.transform.position - enemy.transform.position;
 
             if (calculatedDistance.magnitude <= attackRange)
             {
-                // Stop moving and attack if within range
+                // Stop moving and attack if in range
                 enemyRigidBody.velocity = Vector3.zero;
 
                 if (!isAttacking)
@@ -55,14 +53,12 @@ public class EnemyAgroZone : MonoBehaviour
             }
             else
             {
-                // Rotate to face the player
                 if (calculatedDirection != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(calculatedDirection);
                     enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
                 }
 
-                // Move towards the player if out of attack range
                 if (calculatedDistance.magnitude >= 2)
                 {
                     enemyRigidBody.velocity = new Vector3(
@@ -73,19 +69,17 @@ public class EnemyAgroZone : MonoBehaviour
                 }
                 else
                 {
-                    enemyRigidBody.velocity = Vector3.zero; // Stop moving if too close but not in attack range
+                    enemyRigidBody.velocity = Vector3.zero; 
                 }
             }
         }
         else
         {
-            // Re-enable waypoint movement when the player is out of range
             if (waypointMovement != null)
             {
                 waypointMovement.enabled = true;
             }
 
-            // Stop moving when target is not detected
             enemyRigidBody.velocity = Vector3.zero;
         }
     }
@@ -94,13 +88,11 @@ public class EnemyAgroZone : MonoBehaviour
     {
         isAttacking = true;
 
-        // Trigger the attack animation
         if (animator != null)
         {
             animator.SetTrigger("Attack");
         }
 
-        // Wait for the attack cooldown
         yield return new WaitForSeconds(attackCooldown);
 
         isAttacking = false;

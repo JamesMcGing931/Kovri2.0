@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class TrapDamage : MonoBehaviour
 {
-    public int damage = 10; // Amount of damage the trap deals to the player
+    public int damage = 10; 
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) // Ensure the player has the "Player" tag
+        if (other.CompareTag("Player")) 
         {
             PlayerHealth playerHealth = other.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
                 playerHealth.TakeDamage(damage);
-                Debug.Log($"Player took {damage} damage from trap. Remaining health: {playerHealth.health}");
             }
         }
     }

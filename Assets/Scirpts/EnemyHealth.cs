@@ -12,10 +12,10 @@ public class EnemyHealth : MonoBehaviour
     public float knockbackDuration = 0.2f;
     public ParticleSystem deathEffectPrefab;
 
-    public GameObject potionPrefab; // Assign the potion prefab in the Inspector
-    public GameObject bombPrefab;   // Assign the bomb prefab in the Inspector
-    public float potionDropChance = 0.5f; // 50% chance to drop a potion
-    public float bombDropChance = 0.3f;   // 30% chance to drop a bomb
+    public GameObject potionPrefab; 
+    public GameObject bombPrefab;  
+    public float potionDropChance = 0.5f; 
+    public float bombDropChance = 0.3f;  
 
     private Color originalColor;
     private Animator animator;
@@ -54,13 +54,10 @@ public class EnemyHealth : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        // Trigger the death animation
         animator.SetTrigger("Die");
 
-        // Attempt to drop a collectible
         TryDropItem();
 
-        // Destroy the object after the death animation
         float deathAnimationDuration = 1.2f;
         Destroy(gameObject, deathAnimationDuration);
     }
@@ -94,28 +91,23 @@ public class EnemyHealth : MonoBehaviour
     {
         if (deathEffectPrefab != null)
         {
-            // Instantiate the particle system prefab
             ParticleSystem effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
 
-            // Play the particle system
             effect.Play();
         }
     }
 
     private void TryDropItem()
     {
-        float randomValue = Random.value; // Random value between 0 and 1
+        float randomValue = Random.value; 
 
         if (randomValue <= potionDropChance)
         {
-            // Spawn potion
             Instantiate(potionPrefab, transform.position, Quaternion.identity);
         }
         else if (randomValue <= potionDropChance + bombDropChance)
         {
-            // Spawn bomb
             Instantiate(bombPrefab, transform.position, Quaternion.identity);
         }
-        // No need for an else block; nothing spawns if randomValue > (potionDropChance + bombDropChance)
     }
 }
